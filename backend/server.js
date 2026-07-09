@@ -9,6 +9,10 @@ import fetch        from "node-fetch";
 import { fileURLToPath } from "url";
 import path         from "path";
 
+
+import dotenv from "dotenv";
+dotenv.config();
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app  = express();
 const PORT = process.env.PORT || 3001;
@@ -17,8 +21,8 @@ const PORT = process.env.PORT || 3001;
 // Put these in a real .env file in production!
 const JWT_SECRET         = process.env.JWT_SECRET         || "CHANGE_ME_jwt_secret_min32chars!!";
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "CHANGE_ME_refresh_secret_min32!!";
-const GOOGLE_CLIENT_ID   = process.env.GOOGLE_CLIENT_ID   || "";
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
+const GOOGLE_CLIENT_ID   = process.env.GOOGLE_CLIENT_ID  ;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const BASE_URL           = process.env.BASE_URL           || `http://localhost:${PORT}`;
 
 const ACCESS_TOKEN_TTL  = "15m";
@@ -248,7 +252,9 @@ app.get("/api/auth/me", authenticate, (req, res) => {
 });
 
 // ─── GOOGLE OAUTH ─────────────────────────────────────────────────────────────
-
+const loginWithGoogle = () => {
+    window.location.href = "http://localhost:3001/api/auth/google";
+};
 // GET /api/auth/google  — redirect to Google
 app.get("/api/auth/google", (req, res) => {
   if (!GOOGLE_CLIENT_ID) return res.status(501).json({ error: "Google OAuth not configured" });

@@ -9,10 +9,11 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
-    "better-sqlite3": "^11.5.0",
     "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.5.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.1.5",

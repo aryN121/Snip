@@ -1,11 +1,20 @@
-# 🔗 SNIP — URL Shortener v2 (with Auth)
+# 🔗 SNIP — URL Shortener (with Auth)
 
-Full-stack URL shortener with **JWT auth + Google OAuth**.
+A full-stack URL shortener with secure authentication, analytics, and scalable API design.
 
+##  Features
+- URL shortening with unique identifiers
+- JWT-based authentication (access + refresh tokens)
+- Secure session handling using HTTP-only cookies
+- Click tracking and basic analytics
+- Google OAuth 2.0 login (optional)
+- RESTful API design
+
+---
 ## Stack
-- **Backend:** Node.js 24 + Express 5 + SQLite (`better-sqlite3`)
-- **Auth:** JWT (access + refresh tokens) + Google OAuth 2.0
-- **Frontend:** Vanilla HTML/CSS/JS (no build step)
+- **Backend:** Node.js + Express + SQLite (better-sqlite3)
+- **Auth:** JWT (access + refresh tokens) + Google OAuth 2.0(optional)
+- **Frontend:** Lightweight Vanilla JS SPA (no build tools)
 
 ## Quick Start
 
@@ -13,30 +22,8 @@ Full-stack URL shortener with **JWT auth + Google OAuth**.
 cd backend
 npm install
 npm start
-```
-Open **http://localhost:3000**
-
-## Google OAuth Setup (optional)
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create a project → **APIs & Services → Credentials**
-3. Create **OAuth 2.0 Client ID** (Web application)
-4. Add Authorized redirect URI: `http://localhost:3000/api/auth/google/callback`
-5. Copy Client ID and Secret into `.env`:
-
-```bash
-# backend/.env
-JWT_SECRET=your_random_32plus_char_secret
-JWT_REFRESH_SECRET=another_random_32plus_char_secret
-GOOGLE_CLIENT_ID=your_client_id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your_client_secret
-BASE_URL=http://localhost:3000
-```
-
-Google OAuth works automatically once `.env` is set. Without it, only email/password login works.
 
 ## Auth Flow
-
 ```
 Register / Login  →  Access Token (15min) + Refresh Token cookie (7 days, httpOnly)
 Expired access    →  Silent refresh via /api/auth/refresh
@@ -45,26 +32,25 @@ Google OAuth      →  Redirect flow → token in URL fragment → stored in ses
 ```
 
 ## API Reference
+Auth
+| Method | Endpoint                    | Description          |
+| ------ | --------------------------- | -------------------- |
+| POST   | `/api/auth/register`        | Register user        |
+| POST   | `/api/auth/login`           | Login user           |
+| POST   | `/api/auth/refresh`         | Refresh access token |
+| POST   | `/api/auth/logout`          | Logout user          |
+| GET    | `/api/auth/me`              | Get current user     |
+| GET    | `/api/auth/google`          | Start Google OAuth   |
+| GET    | `/api/auth/google/callback` | OAuth callback       |
 
-### Auth
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Register with email + password |
-| POST | `/api/auth/login` | Login, returns access token |
-| POST | `/api/auth/refresh` | Rotate refresh token, get new access token |
-| POST | `/api/auth/logout` | Invalidate refresh token |
-| GET | `/api/auth/me` | Get current user (requires Bearer token) |
-| GET | `/api/auth/google` | Start Google OAuth flow |
-| GET | `/api/auth/google/callback` | Google OAuth callback |
+URLs (Protected Routes)
+| Method | Endpoint                | Description       |
+| ------ | ----------------------- | ----------------- |
+| POST   | `/api/shorten`          | Create short URL  |
+| GET    | `/api/urls`             | Get all user URLs |
+| GET    | `/api/urls/:code/stats` | Get analytics     |
+| DELETE | `/api/urls/:code`       | Delete URL        |
 
-### URLs (all require `Authorization: Bearer <token>`)
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/shorten` | Create short URL |
-| GET | `/api/urls` | List your URLs (supports `?q=search`) |
-| GET | `/api/urls/:code/stats` | Analytics for a link |
-| DELETE | `/api/urls/:code` | Delete a link |
-| GET | `/:code` | Public redirect (no auth needed) |
 
 ## Project Structure
 
