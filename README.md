@@ -7,14 +7,14 @@ A full-stack URL shortener with secure authentication, analytics, and scalable A
 - JWT-based authentication (access + refresh tokens)
 - Secure session handling using HTTP-only cookies
 - Click tracking and basic analytics
-- Google OAuth 2.0 login (optional)
+- Google OAuth 2.0 login 
 - RESTful API design
 
 ---
 ## Stack
 - **Backend:** Node.js + Express + SQLite (better-sqlite3)
-- **Auth:** JWT (access + refresh tokens) + Google OAuth 2.0(optional)
-- **Frontend:** Lightweight Vanilla JS SPA (no build tools)
+- **Auth:** JWT (access + refresh tokens) + Google OAuth 2.0
+- **Frontend:** React Js
 
 ## Quick Start
 
@@ -62,5 +62,5 @@ url-shortener/
 │   ├── .env.example      ← copy to .env
 │   └── urls.db           ← auto-created SQLite DB
 └── frontend/
-    └── index.html        ← SPA with auth UI
+    └── React Js        ← SPA with auth UI
 ```
