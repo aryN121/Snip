@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import UrlsList from '../components/UrlsList';
-
+import Footer from '../components/Footer'
 export default function Home({ setView, onShowStats }) {
   const { currentUser, apiFetch, openAuthModal } = useAuth();
   const toast = useToast();
@@ -129,6 +129,7 @@ export default function Home({ setView, onShowStats }) {
           <UrlsList limit={5} refreshSignal={refreshSignal} onShowStats={onShowStats} onHasItems={setHasRecent} hideWhenEmpty />
         </div>
       )}
+      <Footer/>
     </>
   );
 }

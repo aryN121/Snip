@@ -5,6 +5,7 @@ import StatsModal from './components/StatsModal';
 import Home from './pages/Home';
 import Manage from './pages/Manage';
 
+
 export default function App() {
   const [view, setView] = useState('home'); // 'home' | 'manage'
   const [statsCode, setStatsCode] = useState(null);
@@ -18,6 +19,7 @@ export default function App() {
 
       <AuthModal />
       <StatsModal code={statsCode} onClose={() => setStatsCode(null)} />
+        
     </div>
   );
 }

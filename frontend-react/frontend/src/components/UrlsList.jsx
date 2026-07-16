@@ -51,7 +51,7 @@ export default function UrlsList({ limit, query = '', refreshSignal, onShowStats
       if (!r.ok) { toast('Failed to delete', true); return; }
       setRemovingCodes((c) => [...c, code]);
       setTimeout(() => {
-        setUrls((list) => list.filter((u) => u.short_code !== code));
+        setUrls((list) => list.filter((u) => u.shortCode !== code));
         setRemovingCodes((c) => c.filter((x) => x !== code));
         toast('✓ Deleted');
       }, 200);
@@ -99,8 +99,8 @@ export default function UrlsList({ limit, query = '', refreshSignal, onShowStats
     <div className="urls-list">
       {shown.map((u) => (
         <div
-          key={u.short_code}
-          style={removingCodes.includes(u.short_code) ? { opacity: 0, transition: 'opacity .2s' } : undefined}
+          key={u.shortCode}
+          style={removingCodes.includes(u.shortCode) ? { opacity: 0, transition: 'opacity .2s' } : undefined}
         >
           <UrlCard url={u} onDeleted={handleDelete} onShowStats={onShowStats} />
         </div>

@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import urlRoutes from "./routes/url.routes.js";
 import { env } from "./config/env.js";
+import { redirect } from "./controllers/url.controlller.js";
 
 const app  = express();
 
@@ -17,7 +18,10 @@ const { BASE_URL } = env;
 
 
 // ─── MIDDLEWARE ───────────────────────────────────────────────────────────────
-app.use(cors({ origin: BASE_URL, credentials: true }));
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true                
+}));
 app.use(express.json());
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, "../frontend")));
@@ -40,6 +44,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api", urlRoutes);
 
+app.get("/:code", redirect);
 
 // ─── ERROR HANDLER ────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {

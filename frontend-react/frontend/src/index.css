@@ -176,3 +176,89 @@ input[readonly] { color: var(--muted); cursor: default; }
   .url-card { grid-template-columns: 1fr; }
   nav { display: none; }
 }
+
+
+
+
+/* foooter */
+.footer {
+  /* Infinite edge-to-edge bleed */
+  background-color: var(--bg); 
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  
+  /* Tight padding to keep it tiny */
+  padding: 24px 20px; 
+  font-family: system-ui, -apple-system, sans-serif;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.footer-logo {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.5px;
+}
+
+.footer-logo .logo-dot {
+  width: 7px;
+  height: 7px;
+  background-color: #d4ff00; /* Neon yellow/green dot */
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.footer-copyright {
+  font-size: 13px;
+  color: #444444;
+}
+
+.footer-right {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-right a {
+  color: #666666;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s ease;
+}
+
+.footer-right a:hover {
+  color: #d4ff00; /* Neon glow on hover */
+}
+
+/* Perfect breakdown for mobile layouts */
+@media (max-width: 500px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  .footer-left {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

@@ -15,6 +15,5 @@ router.post("/shorten" , authenticate , shorten);
 router.get("/urls" , authenticate , getUrls);
 router.get("/urls/:code/stats", authenticate , getStats);
 router.delete("/urls/:code", authenticate , deleteUrl);
-router.get("/:code" , redirect);
 
 export default router;

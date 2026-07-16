@@ -2,8 +2,9 @@ import { useToast } from '../context/ToastContext';
 
 export default function UrlCard({ url, onDeleted, onShowStats }) {
   const toast = useToast();
-  const shortUrl = `${window.location.protocol}//${window.location.host}/${url.short_code}`;
-  const date = new Date(url.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  // const shortUrl = `${window.location.protocol}//${window.location.host}/${url.shortCode}`;
+  const shortUrl = `http://localhost:3000/${url.shortCode}`;
+  const date = new Date(url.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
   const copyLink = () => {
     navigator.clipboard.writeText(shortUrl).then(() => toast('✓ Copied!'));
@@ -21,8 +22,8 @@ export default function UrlCard({ url, onDeleted, onShowStats }) {
       </div>
       <div className="url-card-actions">
         <button className="btn-sm" onClick={copyLink}>Copy</button>
-        <button className="btn-sm" onClick={() => onShowStats(url.short_code)}>Stats</button>
-        <button className="btn-sm danger" onClick={() => onDeleted(url.short_code)}>Delete</button>
+        <button className="btn-sm" onClick={() => onShowStats(url.shortCode)}>Stats</button>
+        <button className="btn-sm danger" onClick={() => onDeleted(url.shortCode)}>Delete</button>
       </div>
     </div>
   );

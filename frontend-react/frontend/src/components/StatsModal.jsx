@@ -14,7 +14,7 @@ function BarChart({ data }) {
             style={{ height: `${Math.max((d.count / max) * 100, 3)}%` }}
             title={`${d.count} clicks on ${d.day}`}
           ></div>
-          <div className="bar-label">{d.day.slice(5)}</div>
+          <div className="bar-label">{d.day ? d.day.slice(5) : ''}</div>
         </div>
       ))}
     </div>
@@ -38,8 +38,8 @@ export default function StatsModal({ code, onClose }) {
 
   if (!code) return null;
 
-  const shortUrl = stats ? `${window.location.protocol}//${window.location.host}/${stats.short_code}` : '';
-  const created = stats ? new Date(stats.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+  const shortUrl = stats ? `http://localhost:3000/${stats.shortCode}` : '';
+  const created = stats ? new Date(stats.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
   const lastClick = stats?.last_clicked
     ? new Date(stats.last_clicked).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : 'Never';
