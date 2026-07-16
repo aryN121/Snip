@@ -12,7 +12,7 @@ A full-stack URL shortener with secure authentication, analytics, and scalable A
 
 ---
 ## Stack
-- **Backend:** Node.js + Express + SQLite (better-sqlite3)
+- **Backend:** Node.js + Express + Postgresql + Prisma(ORM)
 - **Auth:** JWT (access + refresh tokens) + Google OAuth 2.0
 - **Frontend:** React Js
 
