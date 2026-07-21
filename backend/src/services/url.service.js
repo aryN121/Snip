@@ -1,6 +1,9 @@
 import { nanoid } from "nanoid";
 import * as repo from "../repositories/url.repository.js";
 import { isValidUrl, isValidSlug } from "../utils/validators.js";
+import redis from "../config/redis.js";
+
+
 
 export const createShortUrl = async ({ url, customSlug, userId, host }) => {
     if (!url || !isValidUrl(url)) {
@@ -49,6 +52,8 @@ export const createShortUrl = async ({ url, customSlug, userId, host }) => {
         customSlug: customSlug || null,
     });
 
+    // invalidating the cache 
+    await redis.del(`user:${userId}:urls`);
     return {
         shortCode,
         shortUrl: `${host}/${shortCode}`,
@@ -59,9 +64,25 @@ export const createShortUrl = async ({ url, customSlug, userId, host }) => {
 };
 
 export const getUserUrls = async ({ userId, search }) => {
-    return search
-        ? await repo.searchByUser(userId, search)
-        : await repo.getByUser(userId);
+    if(search){
+        return repo.searchByUser(userId, search);
+    }
+    const key = `user:${userId}:urls`;
+
+    const cached = await redis.get(key);
+
+    if (cached) {
+        return JSON.parse(cached);
+    }
+     const urls = await repo.getByUser(userId);
+     await redis.setEx(
+        key, 
+        300, 
+        JSON.stringify(urls),
+     );
+
+    return urls;
+
 };
 
 export const getUrlStats = async ({ code, userId }) => {
@@ -86,21 +107,43 @@ export const removeUrl = async ({ code, userId }) => {
         throw { status: 404, message: "Not found or not yours" };
     }
 
+    await redis.del(`url:${code}`);
+    await redis.del(`user:${userId}:urls`);
     return { message: "Deleted" };
 };
 
 export const resolveShortUrl = async ({ code }) => {
+
     if (code === "favicon.ico") {
         throw { status: 404 };
     }
+    // redis first 
+    const cachedKey = `url:${code}`;
 
+    const cached = await redis.get(cachedKey);
+
+    if(cached){
+        console.log("Cache Hit");
+        await repo.incrementClick(code);
+        return JSON.parse(cached);
+    }
+    console.log("Cache Miss");
+    // query DB
     const row = await repo.findByCode(code);
 
     if (!row) {
         return null;
-    }
+    }   
+
+    await redis.setEx(
+        cachedKey,
+        3600,
+        JSON.stringify(row),
+        
+    );
 
     await repo.incrementClick(code);
+    await redis.del(`user:${row.userId}:urls`);
 
     return row;
 };

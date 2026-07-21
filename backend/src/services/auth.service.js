@@ -7,6 +7,7 @@ import { isValidEmail } from "../utils/validators.js";
 import * as repo from "../repositories/auth.respository.js"
 
 import { env } from "../config/env.js";
+import { hashToken } from "../utils/hash.js";
 
 
 export const registerUser = async ({ email, password, name }) => {
@@ -45,10 +46,12 @@ export const registerUser = async ({ email, password, name }) => {
         name: name.trim(),
     };
 
+    const refreshToken = makeRefreshToken(user.id);
+
     return {
         user,
         accessToken: makeAccessToken(user),
-        refreshToken: makeRefreshToken(user.id),
+        refreshToken,
     };
 };
 export const loginUser = async ({ email, password }) => {
@@ -67,11 +70,11 @@ export const loginUser = async ({ email, password }) => {
     if (!ok) {
         throw new Error("Invalid credentials");
     }
-
+    const refreshToken = await makeRefreshToken(user.id);
     return {
         user,
         accessToken: makeAccessToken(user),
-        refreshToken: makeRefreshToken(user.id),
+        refreshToken,
     };
 };
 
@@ -80,7 +83,8 @@ export const refreshUserToken = async (token) => {
         throw new Error("No refresh token");
     }
 
-    const hash = Buffer.from(token).toString("base64");
+    // const hash = Buffer.from(token).toString("base64");
+    const hash = hashToken(token);
 
     const stored = await repo.findRefreshToken(hash);
 
@@ -97,16 +101,19 @@ export const refreshUserToken = async (token) => {
 
     await repo.deleteRefreshToken(hash);
 
+    const refreshToken = await makeRefreshToken(user.id);
+
     return {
         user,
         accessToken: makeAccessToken(user),
-        refreshToken: makeRefreshToken(user.id),
+        refreshToken,
     };
 };
 export const logoutUser = async (token) => {
     if (!token) return;
 
-    const hash = Buffer.from(token).toString("base64");
+    // const hash = Buffer.from(token).toString("base64");
+    const hash = hashToken(token);
 
     await repo.deleteRefreshToken(hash);
 };
@@ -174,10 +181,10 @@ export const loginWithGoogle = async (code) => {
                 user = await repo.findUserById(info.id);
       }
     }
-
+    const refreshToken = await makeRefreshToken(user.id);
     return {
         user,
         accessToken: makeAccessToken(user),
-        refreshToken: makeRefreshToken(user.id),
+        refreshToken,
     };
 }
