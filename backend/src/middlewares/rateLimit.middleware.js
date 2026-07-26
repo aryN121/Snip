@@ -1,3 +1,4 @@
+import { error } from "console";
 import redis from "../config/redis.js";
 
 
@@ -16,7 +17,8 @@ export const rateLimiter = ({ limit, window, keyGenerator }) => {
                 const ttl = await redis.ttl(key);
 
                 return res.status(429).json({
-                    message: "Too many requests",
+                    success: false,
+                    error: "Too many requests",
                     retryAfter: ttl,
                 });
             }

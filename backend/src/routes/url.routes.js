@@ -23,7 +23,13 @@ router.post(
     }),
     shorten
 );
-router.get("/urls" , authenticate , getUrls);
+router.get("/urls" , 
+     authenticate,
+     rateLimiter({
+    limit: 300,
+    window: 60,
+    keyGenerator: (req) => `dashboard:${req.user.id}`,
+}) , getUrls);
 router.get("/urls/:code/stats", authenticate , getStats);
 router.delete("/urls/:code", authenticate , deleteUrl);
 
