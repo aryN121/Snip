@@ -124,7 +124,6 @@ export const resolveShortUrl = async ({ code }) => {
 
     if(cached){
         console.log("Cache Hit");
-        await repo.incrementClick(code);
         return JSON.parse(cached);
     }
     console.log("Cache Miss");
@@ -135,15 +134,13 @@ export const resolveShortUrl = async ({ code }) => {
         return null;
     }   
 
-    await redis.setEx(
-        cachedKey,
-        3600,
-        JSON.stringify(row),
-        
-    );
-
     await repo.incrementClick(code);
-    await redis.del(`user:${row.userId}:urls`);
+
+    row.clicks += 1;
+
+    await redis.setEx(cachedKey, 3600, JSON.stringify(row));
+
+
 
     return row;
 };
