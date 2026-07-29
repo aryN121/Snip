@@ -137,6 +137,12 @@ export function AuthProvider({ children }) {
           if (refreshed) await fetchMe();
         }
       }
+      else{
+          const refreshed = await tryRefresh();
+             if (refreshed) {
+              await fetchMe();
+          }
+        }
 
       setLoading(false);
       if (authError) toast('Google sign-in failed', true);

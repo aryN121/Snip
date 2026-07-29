@@ -134,7 +134,9 @@ export const resolveShortUrl = async ({ code }) => {
         return null;
     }   
 
-    await repo.incrementClick(code);
+    repo.incrementClick(code).catch(err => {
+    console.error("Failed to increment click:", err);
+    });
 
     row.clicks += 1;
 
